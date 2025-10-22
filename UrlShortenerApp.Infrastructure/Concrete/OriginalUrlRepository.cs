@@ -1,12 +1,46 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UrlShortenerApp.Domain;
+using UrlShortenerApp.Infrastructure.Abstractions;
+using UrlShortenerApp.Infrastructure.Data;
 
 namespace UrlShortenerApp.Infrastructure.Concrete
 {
-    internal class OriginalUrlRepository
+    public class OriginalUrlRepository : IOriginalUrlRepository
     {
+        private readonly UrlShortenerAppDbContext _appDbContext;
+
+        public OriginalUrlRepository(UrlShortenerAppDbContext appDbContext)
+        {
+            _appDbContext = appDbContext;
+        }
+        public async Task Create(OriginalUrl originalUrl)
+        {
+            _appDbContext.Add(originalUrl);
+            await _appDbContext.SaveChangesAsync();
+        }
+
+        public async Task<OriginalUrl> GetByShortCode(string shortCode)
+        {
+            var originalUrl = await _appDbContext.OriginalUrls.FirstOrDefaultAsync(s => s.ShortCode == shortCode);
+            return originalUrl;
+        }
+
+        public async Task Update(OriginalUrl originalUrl)
+        {
+            _appDbContext.Update(originalUrl);
+            await _appDbContext.SaveChangesAsync();
+        }
+
+        public async Task Delete(string shortCode)
+        {
+            _appDbContext.Remove(GetByShortCode(shortCode));
+            await _appDbContext.SaveChangesAsync();
+        }
+
     }
 }
