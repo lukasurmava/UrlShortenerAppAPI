@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace UrlShortenerApp.Infrastructure.Concrete
 {
-    internal class AnalyticRepository
+    public class AnalyticRepository
     {
     }
 }
