@@ -11,8 +11,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Abstractions\" />
-    <Folder Include="Concrete\" />
     <Folder Include="Responses\" />
     <Folder Include="Requests\" />
   </ItemGroup>
