@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace UrlShortenerApp.Service.Abstractions
+namespace UrlShortenerApp.Service.Requests
 {
-    public interface IOriginalUrlService
+    public class CreateOriginalUrlRequest
     {
-        public Task CreateShortUrl();
     }
 }
