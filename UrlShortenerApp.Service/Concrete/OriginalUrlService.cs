@@ -35,6 +35,16 @@ namespace UrlShortenerApp.Service.Concrete
                 OriginalLink = request.OriginalUrl
             };
             await _originalUrlRepository.Create(originalUrl);
+            var dbOriginalUrl = await _originalUrlRepository.GetByShortCode(shortcode);
+            return new CreateOriginalUrlResponse()
+            {
+                OriginalUrl = dbOriginalUrl.OriginalLink,
+                ShortUrl = dbOriginalUrl.ShortCode,
+                CreatedOn = dbOriginalUrl.CreatedOn,
+                ExpirationDate = dbOriginalUrl.ExpirationDate,
+                ClickCount = dbOriginalUrl.ClickCount
+            };
+            
         }
 
         public async Task DeleteUrl(string shortCode)
