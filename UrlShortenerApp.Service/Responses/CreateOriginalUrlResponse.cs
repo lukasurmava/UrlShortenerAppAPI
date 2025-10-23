@@ -4,14 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace UrlShortenerApp.Domain
+namespace UrlShortenerApp.Service.Responses
 {
-    public class OriginalUrl : Entity
+    public class CreateOriginalUrlResponse
     {
-        public string OriginalLink { get; set; }
-        public DateTime CreatedOn { get; set; }
+        public string ShortUrl { get; set; }
+        public string OriginalUrl { get; set; }
+        public DateTime? CreatedOn { get; set; }
         public DateTime? ExpirationDate { get; set; }
         public int ClickCount { get; set; }
-        public bool IsActive { get; set; }
     }
 }

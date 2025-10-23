@@ -10,8 +10,4 @@
     <ProjectReference Include="..\UrlShortenerApp.Infrastructure\UrlShortenerApp.Infrastructure.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Responses\" />
-  </ItemGroup>
-
 </Project>
