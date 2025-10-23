@@ -29,7 +29,7 @@ namespace UrlShortenerApp.Service.Concrete
             if (request.ExpireDate < DateTime.UtcNow)
             {
                 response.IsSuccess = false;
-                response.Error = "Expiredate can't be in the past";
+                response.Error = "Expiredate can't be less then current date";
                 return response;
             }
             var shortcode = request.Alias ?? Infrastructure.Common.GenerateShortCode();
@@ -44,15 +44,15 @@ namespace UrlShortenerApp.Service.Concrete
             };
             await _originalUrlRepository.Create(originalUrl);
             var dbOriginalUrl = await _originalUrlRepository.GetByShortCode(shortcode);
-            return new CreateOriginalUrlResponse()
-            {
-                OriginalUrl = dbOriginalUrl.OriginalLink,
-                ShortUrl = dbOriginalUrl.ShortCode,
-                CreatedOn = dbOriginalUrl.CreatedOn,
-                ExpirationDate = dbOriginalUrl.ExpirationDate,
-                ClickCount = dbOriginalUrl.ClickCount
-            };
-            
+
+
+            response.OriginalUrl = dbOriginalUrl.OriginalLink;
+            response.ShortUrl = dbOriginalUrl.ShortCode;
+            response.CreatedOn = dbOriginalUrl.CreatedOn;
+            response.ExpirationDate = dbOriginalUrl.ExpirationDate;
+            response.ClickCount = dbOriginalUrl.ClickCount;
+            response.IsSuccess = true;
+            return response;
         }
 
         public async Task DeleteUrl(string shortCode)
