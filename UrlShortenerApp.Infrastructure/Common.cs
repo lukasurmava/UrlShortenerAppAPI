@@ -8,7 +8,7 @@ namespace UrlShortenerApp.Infrastructure
 {
     public class Common
     {
-        static string GenerateShortCode()
+        public static string GenerateShortCode()
         {
             string alphabet = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
             string code = "";
