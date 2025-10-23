@@ -8,7 +8,7 @@ using UrlShortenerApp.Domain;
 
 namespace UrlShortenerApp.Service.Responses
 {
-    public class GetUrlDetailsResponse
+    public class GetUrlDetailsResponse : ResponseBase
     {
         public string OriginalUrl { get; set; }
         public string ShortCode { get; set; }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace UrlShortenerApp.Service.Responses
 {
-    public class CreateOriginalUrlResponse
+    public class CreateOriginalUrlResponse : ResponseBase
     {
         public string ShortUrl { get; set; }
         public string OriginalUrl { get; set; }

@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace UrlShortenerApp.Domain
+namespace UrlShortenerApp.Service.Responses
 {
-    public abstract class Entity
+    public class DeleteOriginalUrlResponse : ResponseBase
     {
-        public string ShortCode { get; set; }
     }
 }

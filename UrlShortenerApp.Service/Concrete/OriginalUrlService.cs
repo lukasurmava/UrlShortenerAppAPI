@@ -10,6 +10,7 @@ using UrlShortenerApp.Service.Requests;
 using UrlShortenerApp.Service.Responses;
 using UrlShortenerApp.Domain;
 using System.Runtime.InteropServices;
+using System.Runtime.CompilerServices;
 
 namespace UrlShortenerApp.Service.Concrete
 {
@@ -24,6 +25,13 @@ namespace UrlShortenerApp.Service.Concrete
         }
         public async Task<CreateOriginalUrlResponse> CreateShortUrl(CreateOriginalUrlRequest request)
         {
+            var response = new CreateOriginalUrlResponse();
+            if (request.ExpireDate < DateTime.UtcNow)
+            {
+                response.IsSuccess = false;
+                response.Error = "Expiredate can't be in the past";
+                return response;
+            }
             var shortcode = request.Alias ?? Infrastructure.Common.GenerateShortCode();
             var originalUrl = new OriginalUrl()
             {
