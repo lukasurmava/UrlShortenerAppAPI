@@ -87,6 +87,7 @@ namespace UrlShortenerApp.Service.Concrete
             {
                 response.IsSuccess = false;
                 response.Error = "Can't find record by that short code";
+                return response;
             }
             else
             {
@@ -104,7 +105,13 @@ namespace UrlShortenerApp.Service.Concrete
 
         public async Task<UpdateOriginalUrlResponse> UpdateUrl(UpdateOriginalUrlRequest request)
         {
-            throw new NotImplementedException();
+            var response = new UpdateOriginalUrlResponse();
+            var updatedOriginalUrl = new OriginalUrl();
+            if (request.OriginalUrl is null)
+            {
+
+            }
+            
         }
     }
 }
