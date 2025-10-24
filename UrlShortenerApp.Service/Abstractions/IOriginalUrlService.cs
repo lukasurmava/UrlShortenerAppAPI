@@ -14,7 +14,7 @@ namespace UrlShortenerApp.Service.Abstractions
         public Task<CreateOriginalUrlResponse> CreateShortUrl(CreateOriginalUrlRequest request);
         public Task<GetUrlDetailsResponse> GetUrlDetails(string shortCode);
 
-        public Task UpdateUrl(UpdateOriginalUrlRequest request);
-        public Task DeleteUrl(string shortCode);
+        public Task<UpdateOriginalUrlResponse> UpdateUrl(UpdateOriginalUrlRequest request);
+        public Task<DeleteOriginalUrlResponse> DeleteUrl(string shortCode);
     }
 }

@@ -55,9 +55,22 @@ namespace UrlShortenerApp.Service.Concrete
             return response;
         }
 
-        public async Task DeleteUrl(string shortCode)
+        public async Task<DeleteOriginalUrlResponse> DeleteUrl(string shortCode)
         {
-            throw new NotImplementedException();
+            var response = new DeleteOriginalUrlResponse();
+            if (_originalUrlRepository.GetByShortCode(shortCode) is not null)
+            {
+                await _originalUrlRepository.Delete(shortCode);
+                response.IsSuccess = true;
+                return response;
+            }
+            else
+            {
+                response.IsSuccess = false;
+                response.Error = "Can't find record by this short code";
+                return response;
+            }
+            
         }
 
         public async Task GetByShortCode(string shortCode)
@@ -70,7 +83,7 @@ namespace UrlShortenerApp.Service.Concrete
             throw new NotImplementedException();
         }
 
-        public async Task UpdateUrl(UpdateOriginalUrlRequest request)
+        public async Task<UpdateOriginalUrlResponse> UpdateUrl(UpdateOriginalUrlRequest request)
         {
             throw new NotImplementedException();
         }
