@@ -43,14 +43,12 @@ namespace UrlShortenerApp.Service.Concrete
                 OriginalLink = request.OriginalUrl
             };
             await _originalUrlRepository.Create(originalUrl);
-            var dbOriginalUrl = await _originalUrlRepository.GetByShortCode(shortcode);
 
-
-            response.OriginalUrl = dbOriginalUrl.OriginalLink;
-            response.ShortUrl = dbOriginalUrl.ShortCode;
-            response.CreatedOn = dbOriginalUrl.CreatedOn;
-            response.ExpirationDate = dbOriginalUrl.ExpirationDate;
-            response.ClickCount = dbOriginalUrl.ClickCount;
+            response.OriginalUrl = originalUrl.OriginalLink;
+            response.ShortUrl = originalUrl.ShortCode;
+            response.CreatedOn = originalUrl.CreatedOn;
+            response.ExpirationDate = originalUrl.ExpirationDate;
+            response.ClickCount = originalUrl.ClickCount;
             response.IsSuccess = true;
             return response;
         }
@@ -58,7 +56,7 @@ namespace UrlShortenerApp.Service.Concrete
         public async Task<DeleteOriginalUrlResponse> DeleteUrl(string shortCode)
         {
             var response = new DeleteOriginalUrlResponse();
-            if (_originalUrlRepository.GetByShortCode(shortCode) is not null)
+            if (await _originalUrlRepository.GetByShortCode(shortCode) is not null)
             {
                 await _originalUrlRepository.Delete(shortCode);
                 response.IsSuccess = true;
@@ -73,14 +71,35 @@ namespace UrlShortenerApp.Service.Concrete
             
         }
 
+        //This is redirect method
         public async Task GetByShortCode(string shortCode)
         {
             throw new NotImplementedException();
         }
 
+        //This is method do get all the details
         public async Task<GetUrlDetailsResponse> GetUrlDetails(string shortCode)
         {
-            throw new NotImplementedException();
+            var response = new GetUrlDetailsResponse();
+            var originalUrl = await _originalUrlRepository.GetByShortCode(shortCode);
+            var analytics = await _analyticRepository.GetByShortCode(shortCode);
+            if (originalUrl is null)
+            {
+                response.IsSuccess = false;
+                response.Error = "Can't find record by that short code";
+            }
+            else
+            {
+                response.IsSuccess = true;
+                response.ShortCode = shortCode;
+                response.ExpirationDate = originalUrl.ExpirationDate;
+                response.CreatedOn = originalUrl.CreatedOn;
+                response.Analytics = analytics;
+                response.ClickCount = originalUrl.ClickCount;
+                response.OriginalUrl = originalUrl.OriginalLink;
+                return response;
+            }
+
         }
 
         public async Task<UpdateOriginalUrlResponse> UpdateUrl(UpdateOriginalUrlRequest request)

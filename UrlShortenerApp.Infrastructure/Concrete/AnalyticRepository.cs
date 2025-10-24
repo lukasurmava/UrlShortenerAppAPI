@@ -30,9 +30,9 @@ namespace UrlShortenerApp.Infrastructure.Concrete
             await _appDbContext.SaveChangesAsync();
         }
 
-        public async Task<Analytic> GetByShortCode(string shortCode)
+        public async Task<List<Analytic>> GetByShortCode(string shortCode)
         {
-            var analytic = await _appDbContext.Analytics.FirstOrDefaultAsync(s => s.ShortCode == shortCode);
+            var analytic = await _appDbContext.Analytics.Where(s => s.ShortCode == shortCode).ToListAsync();
             return analytic;
         }
 

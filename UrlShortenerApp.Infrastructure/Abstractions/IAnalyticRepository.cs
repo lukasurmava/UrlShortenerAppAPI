@@ -11,7 +11,7 @@ namespace UrlShortenerApp.Infrastructure.Abstractions
     {
         public Task Create(Analytic analytic);
 
-        public Task<Analytic> GetByShortCode(string shortCode);
+        public Task<List<Analytic>> GetByShortCode(string shortCode);
         public Task Update(Analytic analytic);
         public Task Delete(string shortCode);
     }
