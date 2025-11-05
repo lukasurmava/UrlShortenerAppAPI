@@ -15,10 +15,32 @@ namespace UrlShortenerApp.API.Controllers
             _originalUrlService = originalUrlService;
         }
 
-        [HttpGet]
+        [HttpPost]
         public async Task<ActionResult<CreateOriginalUrlResponse>> Create(CreateOriginalUrlRequest createOriginalUrlRequest)
         {
             var response = await _originalUrlService.CreateShortUrl(createOriginalUrlRequest);
+            if (!response.IsSuccess)
+            {
+                return BadRequest(response.Error);
+            }
+            return response;
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<GetByShortCodeResponse>> GetByShortCode(string shortCode)
+        {
+            var response = await _originalUrlService.GetByShortCode(shortCode);
+            if (!response.IsSuccess)
+            {
+                return BadRequest(response.Error);
+            }
+            return response;
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<GetUrlDetailsResponse>> GetUrlDetails(string shortCode)
+        {
+            var response = await _originalUrlService.GetUrlDetails(shortCode);
             if (!response.IsSuccess)
             {
                 return BadRequest(response.Error);
