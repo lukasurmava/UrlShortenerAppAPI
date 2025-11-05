@@ -23,6 +23,7 @@ namespace UrlShortenerApp.Service.Concrete
             _analyticRepository = analyticRepository;
             _originalUrlRepository = originalUrlRepository;
         }
+        //Create ShortUrl
         public async Task<CreateOriginalUrlResponse> CreateShortUrl(CreateOriginalUrlRequest request)
         {
             var response = new CreateOriginalUrlResponse();
@@ -53,6 +54,7 @@ namespace UrlShortenerApp.Service.Concrete
             return response;
         }
 
+        //Delete Url
         public async Task<DeleteOriginalUrlResponse> DeleteUrl(string shortCode)
         {
             var response = new DeleteOriginalUrlResponse();
@@ -77,7 +79,7 @@ namespace UrlShortenerApp.Service.Concrete
             throw new NotImplementedException();
         }
 
-        //This is method do get all the details
+        //This is method to get all the details
         public async Task<GetUrlDetailsResponse> GetUrlDetails(string shortCode)
         {
             var response = new GetUrlDetailsResponse();
@@ -107,9 +109,11 @@ namespace UrlShortenerApp.Service.Concrete
         {
             var response = new UpdateOriginalUrlResponse();
             var updatedOriginalUrl = new OriginalUrl();
-            if (request.OriginalUrl is null)
+            if (request.OriginalUrl is null && request.ExpirationDate is null)
             {
-
+                response.IsSuccess = false;
+                response.Error = "There is nothing to update";
+                return response;
             }
             
         }
