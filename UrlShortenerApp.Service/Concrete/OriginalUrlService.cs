@@ -74,9 +74,19 @@ namespace UrlShortenerApp.Service.Concrete
         }
 
         //This is redirect method
-        public async Task GetByShortCode(string shortCode)
+        public async Task<GetByShortCodeResponse> GetByShortCode(string shortCode)
         {
-            throw new NotImplementedException();
+            var response = new GetByShortCodeResponse();
+            var entity = await _originalUrlRepository.GetByShortCode(shortCode);
+            if (entity is null)
+            {
+                response.Error = "URL with this short code could not be found!";
+                response.IsSuccess = false;
+                return response;
+            }
+            response.originalUrl = entity.OriginalLink;
+            response.IsSuccess = true;
+            return response;
         }
 
         //This is method to get all the details
@@ -105,17 +115,25 @@ namespace UrlShortenerApp.Service.Concrete
 
         }
 
+        //Update method
         public async Task<UpdateOriginalUrlResponse> UpdateUrl(UpdateOriginalUrlRequest request)
         {
             var response = new UpdateOriginalUrlResponse();
-            var updatedOriginalUrl = new OriginalUrl();
-            if (request.OriginalUrl is null && request.ExpirationDate is null)
+            var entity = await _originalUrlRepository.GetByShortCode(request.ShortCode);
+
+            if (request.OriginalUrl is null && request.ExpirationDate is null && request.IsActive is null)
             {
                 response.IsSuccess = false;
                 response.Error = "There is nothing to update";
                 return response;
             }
-            
+
+            entity.ExpirationDate = request.ExpirationDate ?? entity.ExpirationDate;
+            entity.OriginalLink = request.OriginalUrl ?? entity.OriginalLink;
+            entity.IsActive = request.IsActive ?? entity.IsActive;
+            await _originalUrlRepository.Update(entity);
+            response.IsSuccess = true;
+            return response;
         }
     }
 }
