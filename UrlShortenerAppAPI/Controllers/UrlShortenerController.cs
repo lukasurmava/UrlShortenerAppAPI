@@ -47,5 +47,16 @@ namespace UrlShortenerApp.API.Controllers
             }
             return response;
         }
+
+        [HttpPut]
+        public async Task<ActionResult<UpdateOriginalUrlResponse>> Update(UpdateOriginalUrlRequest request)
+        {
+            var response = await _originalUrlService.UpdateUrl(request);
+            if (!response.IsSuccess)
+            {
+                return BadRequest(response.Error);
+            }
+            return response;
+        }
     }
 }
