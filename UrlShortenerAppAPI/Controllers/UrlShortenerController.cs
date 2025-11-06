@@ -58,5 +58,16 @@ namespace UrlShortenerApp.API.Controllers
             }
             return response;
         }
+
+        [HttpDelete]
+        public async Task<ActionResult<DeleteOriginalUrlResponse>> Delete(string shortCode)
+        {
+            var response = await _originalUrlService.DeleteUrl(shortCode);
+            if (!response.IsSuccess)
+            {
+                return BadRequest(response.Error);
+            }
+            return response;
+        }
     }
 }
