@@ -1,9 +1,16 @@
+using Microsoft.EntityFrameworkCore;
+using System;
+using UrlShortenerApp.Infrastructure.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+//builder.Services.AddDbContext<UrlShortenerAppDbContext>(options => options.UseInMemoryDatabase("UrlShortenerAppDb"));
+builder.Services.AddDbContext<UrlShortenerAppDbContext>(options =>
+    options.UseInMemoryDatabase("UrlShortenerDb"));
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
