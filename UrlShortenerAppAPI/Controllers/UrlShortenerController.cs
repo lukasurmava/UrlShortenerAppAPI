@@ -27,7 +27,8 @@ namespace UrlShortenerApp.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<GetByShortCodeResponse>> GetByShortCode(string shortCode)
+        [HttpGet("{shortCode}")]
+        public async Task<ActionResult<GetByShortCodeResponse>> GetByShortCode([FromRoute] string shortCode)
         {
             var response = await _originalUrlService.GetByShortCode(shortCode);
             if (!response.IsSuccess)
@@ -38,6 +39,7 @@ namespace UrlShortenerApp.API.Controllers
         }
 
         [HttpGet]
+        [HttpGet("details/{shortCode}")]
         public async Task<ActionResult<GetUrlDetailsResponse>> GetUrlDetails(string shortCode)
         {
             var response = await _originalUrlService.GetUrlDetails(shortCode);
@@ -60,7 +62,8 @@ namespace UrlShortenerApp.API.Controllers
         }
 
         [HttpDelete]
-        public async Task<ActionResult<DeleteOriginalUrlResponse>> Delete(string shortCode)
+        [HttpDelete("{shortCode}")]
+        public async Task<ActionResult<DeleteOriginalUrlResponse>> Delete([FromRoute] string shortCode)
         {
             var response = await _originalUrlService.DeleteUrl(shortCode);
             if (!response.IsSuccess)
