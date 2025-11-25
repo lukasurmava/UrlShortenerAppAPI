@@ -1,6 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using System;
+using UrlShortenerApp.Infrastructure.Abstractions;
 using UrlShortenerApp.Infrastructure.Data;
+using UrlShortenerApp.Infrastructure.Concrete;
+using UrlShortenerApp.Service.Abstractions;
+using UrlShortenerApp.Service.Concrete;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,9 +12,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-//builder.Services.AddDbContext<UrlShortenerAppDbContext>(options => options.UseInMemoryDatabase("UrlShortenerAppDb"));
 builder.Services.AddDbContext<UrlShortenerAppDbContext>(options =>
     options.UseInMemoryDatabase("UrlShortenerDb"));
+builder.Services.AddScoped<IOriginalUrlRepository, OriginalUrlRepository>();
+builder.Services.AddScoped<IAnalyticRepository, AnalyticRepository>();
+builder.Services.AddScoped<IOriginalUrlService, OriginalUrlService>();
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
