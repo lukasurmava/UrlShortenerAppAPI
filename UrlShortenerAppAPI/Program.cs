@@ -18,6 +18,9 @@ builder.Services.AddScoped<IOriginalUrlRepository, OriginalUrlRepository>();
 builder.Services.AddScoped<IAnalyticRepository, AnalyticRepository>();
 builder.Services.AddScoped<IOriginalUrlService, OriginalUrlService>();
 builder.Services.AddOpenApi();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
 
 var app = builder.Build();
 
@@ -25,6 +28,8 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();

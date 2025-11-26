@@ -33,7 +33,7 @@ namespace UrlShortenerApp.Service.Concrete
                 response.Error = "Expiredate can't be less then current date";
                 return response;
             }
-            var shortcode = request.Alias ?? Infrastructure.Common.GenerateShortCode();
+            var shortcode = string.IsNullOrEmpty(request.Alias) ? Common.GenerateShortCode() : request.Alias;
             var originalUrl = new OriginalUrl()
             {
                 ShortCode = shortcode,
