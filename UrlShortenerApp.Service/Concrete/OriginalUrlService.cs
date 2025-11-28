@@ -19,10 +19,11 @@ namespace UrlShortenerApp.Service.Concrete
         private readonly IAnalyticRepository _analyticRepository;
         private readonly IOriginalUrlRepository _originalUrlRepository;
         private readonly IAnalyticService _analyticService;
-        public OriginalUrlService(IAnalyticRepository analyticRepository, IOriginalUrlRepository originalUrlRepository)
+        public OriginalUrlService(IAnalyticRepository analyticRepository, IOriginalUrlRepository originalUrlRepository, IAnalyticService analyticService)
         {
             _analyticRepository = analyticRepository;
             _originalUrlRepository = originalUrlRepository;
+            _analyticService = analyticService;
         }
         //Create ShortUrl
         public async Task<CreateOriginalUrlResponse> CreateShortUrl(CreateOriginalUrlRequest request)
