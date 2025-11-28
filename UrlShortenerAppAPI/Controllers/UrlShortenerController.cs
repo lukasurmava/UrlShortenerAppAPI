@@ -31,12 +31,13 @@ namespace UrlShortenerApp.API.Controllers
         [HttpGet("{shortCode}")]
         public async Task<ActionResult<GetByShortCodeResponse>> GetByShortCode([FromRoute] string shortCode)
         {
-            var response = await _originalUrlService.GetByShortCode(shortCode);
+            var ipAdress = Request.Headers["User-Agent"].ToString();
+            var userAgent = HttpContext.Connection.RemoteIpAddress?.ToString();
+            var response = await _originalUrlService.GetByShortCode(shortCode, userAgent, ipAdress);
             if (!response.IsSuccess)
             {
                 return BadRequest(response.Error);
             }
-            await _analyticService.LogAnalytic(shortCode, HttpContext.Connection.RemoteIpAddress?.ToString(), Request.Headers["User-Agent"].ToString());
             return response;
         }
 
