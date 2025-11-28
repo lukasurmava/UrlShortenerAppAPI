@@ -10,7 +10,7 @@ namespace UrlShortenerApp.Service.Abstractions
 {
     public interface IOriginalUrlService
     {
-        public Task<GetByShortCodeResponse> GetByShortCode(string shortCode);
+        public Task<GetByShortCodeResponse> GetByShortCode(string shortCode, string userAgent, string ipAdress);
         public Task<CreateOriginalUrlResponse> CreateShortUrl(CreateOriginalUrlRequest request);
         public Task<GetUrlDetailsResponse> GetUrlDetails(string shortCode);
 

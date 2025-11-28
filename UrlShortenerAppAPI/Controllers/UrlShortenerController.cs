@@ -10,9 +10,11 @@ namespace UrlShortenerApp.API.Controllers
     public class UrlShortenerController : ControllerBase
     {
         private readonly IOriginalUrlService _originalUrlService;
-        public UrlShortenerController(IOriginalUrlService originalUrlService)
+        private readonly IAnalyticService _analyticService;
+        public UrlShortenerController(IOriginalUrlService originalUrlService, IAnalyticService analyticService)
         {
             _originalUrlService = originalUrlService;
+            _analyticService = analyticService;
         }
 
         [HttpPost]
@@ -34,6 +36,7 @@ namespace UrlShortenerApp.API.Controllers
             {
                 return BadRequest(response.Error);
             }
+            await _analyticService.LogAnalytic(shortCode, HttpContext.Connection.RemoteIpAddress?.ToString(), Request.Headers["User-Agent"].ToString());
             return response;
         }
 

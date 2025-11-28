@@ -18,6 +18,7 @@ namespace UrlShortenerApp.Service.Concrete
     {
         private readonly IAnalyticRepository _analyticRepository;
         private readonly IOriginalUrlRepository _originalUrlRepository;
+        private readonly IAnalyticService _analyticService;
         public OriginalUrlService(IAnalyticRepository analyticRepository, IOriginalUrlRepository originalUrlRepository)
         {
             _analyticRepository = analyticRepository;
@@ -74,7 +75,7 @@ namespace UrlShortenerApp.Service.Concrete
         }
 
         //This is redirect method
-        public async Task<GetByShortCodeResponse> GetByShortCode(string shortCode)
+        public async Task<GetByShortCodeResponse> GetByShortCode(string shortCode, string userAgent, string ipAdress)
         {
             var response = new GetByShortCodeResponse();
             var entity = await _originalUrlRepository.GetByShortCode(shortCode);
@@ -86,6 +87,7 @@ namespace UrlShortenerApp.Service.Concrete
             }
             entity.ClickCount += 1;
             await _originalUrlRepository.Update(entity);
+            await _analyticService.LogAnalytic(shortCode, userAgent, ipAdress);
             response.OriginalUrl = entity.OriginalLink;
             response.IsSuccess = true;
             return response;
