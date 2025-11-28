@@ -146,5 +146,14 @@ namespace UrlShortenerApp.Service.Concrete
             response.IsSuccess = true;
             return response;
         }
+
+        public async Task DeleteExpiredUrl()
+        {
+            var expiredUrls = await _originalUrlRepository.GetAll();
+            foreach (var url in expiredUrls.Where(u => u.ExpirationDate < DateTime.Now))
+            {
+                await _originalUrlRepository.Deactivate(url.ShortCode);
+            }
+        }
     }
 }

@@ -42,5 +42,19 @@ namespace UrlShortenerApp.Infrastructure.Concrete
             await _appDbContext.SaveChangesAsync();
         }
 
+        public async Task<List<OriginalUrl>> GetAll()
+        {
+            var originalUrls = await _appDbContext.OriginalUrls.ToListAsync();
+            return originalUrls;
+        }
+
+        public async Task Deactivate(string shortCode)
+        {
+            var originalUrl = _appDbContext.OriginalUrls.FirstOrDefault(s => s.ShortCode == shortCode);
+            originalUrl.IsActive = false;
+            await _appDbContext.SaveChangesAsync();
+
+        }
+
     }
 }

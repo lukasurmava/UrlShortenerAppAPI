@@ -16,5 +16,6 @@ namespace UrlShortenerApp.Service.Abstractions
 
         public Task<UpdateOriginalUrlResponse> UpdateUrl(UpdateOriginalUrlRequest request);
         public Task<DeleteOriginalUrlResponse> DeleteUrl(string shortCode);
+        public Task DeleteExpiredUrls();
     }
 }
