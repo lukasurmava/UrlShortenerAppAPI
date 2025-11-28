@@ -86,6 +86,12 @@ namespace UrlShortenerApp.Service.Concrete
                 response.IsSuccess = false;
                 return response;
             }
+            if (entity.ExpirationDate < DateTime.UtcNow)
+            {
+                response.Error = "URL with this short code has expired!";
+                response.IsSuccess = false;
+                return response;
+            }
             entity.ClickCount += 1;
             await _originalUrlRepository.Update(entity);
             await _analyticService.LogAnalytic(shortCode, userAgent, ipAdress);
