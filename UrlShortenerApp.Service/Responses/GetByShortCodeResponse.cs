@@ -8,6 +8,6 @@ namespace UrlShortenerApp.Service.Responses
 {
     public class GetByShortCodeResponse : ResponseBase
     {
-        public string originalUrl { get; set; }
+        public string OriginalUrl { get; set; }
     }
 }

@@ -84,7 +84,9 @@ namespace UrlShortenerApp.Service.Concrete
                 response.IsSuccess = false;
                 return response;
             }
-            response.originalUrl = entity.OriginalLink;
+            entity.ClickCount += 1;
+            await _originalUrlRepository.Update(entity);
+            response.OriginalUrl = entity.OriginalLink;
             response.IsSuccess = true;
             return response;
         }
