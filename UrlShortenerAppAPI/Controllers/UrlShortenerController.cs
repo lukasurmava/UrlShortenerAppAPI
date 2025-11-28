@@ -38,7 +38,7 @@ namespace UrlShortenerApp.API.Controllers
             {
                 return BadRequest(response.Error);
             }
-            return response;
+            return Redirect(response.OriginalUrl);
         }
 
         [HttpGet("details/{shortCode}")]
