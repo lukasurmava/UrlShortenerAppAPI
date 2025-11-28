@@ -17,6 +17,7 @@ builder.Services.AddDbContext<UrlShortenerAppDbContext>(options =>
 builder.Services.AddScoped<IOriginalUrlRepository, OriginalUrlRepository>();
 builder.Services.AddScoped<IAnalyticRepository, AnalyticRepository>();
 builder.Services.AddScoped<IOriginalUrlService, OriginalUrlService>();
+builder.Services.AddScoped<IAnalyticService, AnalyticService>();
 builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
