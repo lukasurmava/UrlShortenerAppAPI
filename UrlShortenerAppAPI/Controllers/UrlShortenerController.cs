@@ -31,8 +31,8 @@ namespace UrlShortenerApp.API.Controllers
         [HttpGet("{shortCode}")]
         public async Task<ActionResult<GetByShortCodeResponse>> GetByShortCode([FromRoute] string shortCode)
         {
-            var ipAdress = Request.Headers["User-Agent"].ToString();
-            var userAgent = HttpContext.Connection.RemoteIpAddress?.ToString();
+            var userAgent = Request.Headers["User-Agent"].ToString();
+            var ipAdress = HttpContext.Connection.RemoteIpAddress?.ToString();
             var response = await _originalUrlService.GetByShortCode(shortCode, userAgent, ipAdress);
             if (!response.IsSuccess)
             {
