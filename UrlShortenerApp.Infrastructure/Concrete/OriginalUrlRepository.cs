@@ -50,7 +50,7 @@ namespace UrlShortenerApp.Infrastructure.Concrete
 
         public async Task Deactivate(string shortCode)
         {
-            var originalUrl = _appDbContext.OriginalUrls.FirstOrDefault(s => s.ShortCode == shortCode);
+            var originalUrl = await _appDbContext.OriginalUrls.FirstOrDefaultAsync(s => s.ShortCode == shortCode);
             originalUrl.IsActive = false;
             await _appDbContext.SaveChangesAsync();
 

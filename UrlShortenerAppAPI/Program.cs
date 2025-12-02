@@ -5,6 +5,7 @@ using UrlShortenerApp.Infrastructure.Data;
 using UrlShortenerApp.Infrastructure.Concrete;
 using UrlShortenerApp.Service.Abstractions;
 using UrlShortenerApp.Service.Concrete;
+using UrlShortenerApp.API.BackgroundServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,9 +19,11 @@ builder.Services.AddScoped<IOriginalUrlRepository, OriginalUrlRepository>();
 builder.Services.AddScoped<IAnalyticRepository, AnalyticRepository>();
 builder.Services.AddScoped<IOriginalUrlService, OriginalUrlService>();
 builder.Services.AddScoped<IAnalyticService, AnalyticService>();
+builder.Services.AddHostedService<ExpiredUrlCleanupBackgroundService>();
 builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
 
 
 var app = builder.Build();

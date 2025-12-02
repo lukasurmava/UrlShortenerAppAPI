@@ -150,7 +150,7 @@ namespace UrlShortenerApp.Service.Concrete
         public async Task DeleteExpiredUrl()
         {
             var expiredUrls = await _originalUrlRepository.GetAll();
-            foreach (var url in expiredUrls.Where(u => u.ExpirationDate < DateTime.Now))
+            foreach (var url in expiredUrls.Where(u => u.ExpirationDate < DateTime.Now && u.IsActive == true))
             {
                 await _originalUrlRepository.Deactivate(url.ShortCode);
             }
