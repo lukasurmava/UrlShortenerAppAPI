@@ -121,6 +121,7 @@ namespace UrlShortenerApp.Service.Concrete
                 response.Analytics = analytics;
                 response.ClickCount = originalUrl.ClickCount;
                 response.OriginalUrl = originalUrl.OriginalLink;
+                response.IsActive = originalUrl.IsActive;
                 return response;
             }
 
@@ -147,10 +148,10 @@ namespace UrlShortenerApp.Service.Concrete
             return response;
         }
 
-        public async Task DeleteExpiredUrl()
+        public async Task DeleteExpiredUrls()
         {
             var expiredUrls = await _originalUrlRepository.GetAll();
-            foreach (var url in expiredUrls.Where(u => u.ExpirationDate < DateTime.Now && u.IsActive == true))
+            foreach (var url in expiredUrls.Where(u => u.ExpirationDate < DateTime.UtcNow && u.IsActive == true))
             {
                 await _originalUrlRepository.Deactivate(url.ShortCode);
             }
