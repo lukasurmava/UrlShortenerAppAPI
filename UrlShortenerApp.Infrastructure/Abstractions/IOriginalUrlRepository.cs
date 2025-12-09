@@ -15,5 +15,6 @@ namespace UrlShortenerApp.Infrastructure.Abstractions
         public Task Delete(string shortCode);
         public Task<List<OriginalUrl>> GetAll();
         public Task Deactivate(string shortCode);
+        public Task<bool> ShortCodeExist(string shortCode);
     }
 }

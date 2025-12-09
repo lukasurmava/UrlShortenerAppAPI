@@ -56,5 +56,11 @@ namespace UrlShortenerApp.Infrastructure.Concrete
 
         }
 
+        public async Task<bool> ShortCodeExist(string shortCode)
+        {
+            var exists = await _appDbContext.OriginalUrls.AnyAsync(s => s.ShortCode == shortCode);
+            return exists;
+        }
+
     }
 }
