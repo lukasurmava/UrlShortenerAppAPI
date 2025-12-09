@@ -29,20 +29,6 @@ namespace UrlShortenerApp.API.Controllers
             return response;
         }
 
-        //Redirect to Original URL
-        [HttpGet("{shortCode}")]
-        public async Task<IActionResult> GetByShortCode(string shortCode)
-        {
-            var userAgent = Request.Headers["User-Agent"].ToString();
-            var ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString();
-            var response = await _originalUrlService.GetByShortCode(shortCode, userAgent, ipAddress);
-            if (!response.IsSuccess)
-            {
-                return NotFound(response.Error);
-            }
-            return Redirect(response.OriginalUrl);
-        }
-
         //Delete Short URL
         [HttpGet("details/{shortCode}")]
         public async Task<ActionResult<GetUrlDetailsResponse>> GetUrlDetails(string shortCode)
