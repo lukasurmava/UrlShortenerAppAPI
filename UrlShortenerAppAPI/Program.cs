@@ -14,7 +14,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddDbContext<UrlShortenerAppDbContext>(options =>
-    options.UseInMemoryDatabase("UrlShortenerDb"));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddScoped<IOriginalUrlRepository, OriginalUrlRepository>();
 builder.Services.AddScoped<IAnalyticRepository, AnalyticRepository>();
 builder.Services.AddScoped<IOriginalUrlService, OriginalUrlService>();
