@@ -17,6 +17,7 @@ namespace UrlShortenerApp.API.Controllers
             _analyticService = analyticService;
         }
 
+        //Create Short URL
         [HttpPost]
         public async Task<ActionResult<CreateOriginalUrlResponse>> Create(CreateOriginalUrlRequest createOriginalUrlRequest)
         {
@@ -28,19 +29,21 @@ namespace UrlShortenerApp.API.Controllers
             return response;
         }
 
+        //Redirect to Original URL
         [HttpGet("{shortCode}")]
-        public async Task<ActionResult<GetByShortCodeResponse>> GetByShortCode([FromRoute] string shortCode)
+        public async Task<IActionResult> GetByShortCode(string shortCode)
         {
             var userAgent = Request.Headers["User-Agent"].ToString();
-            var ipAdress = HttpContext.Connection.RemoteIpAddress?.ToString();
-            var response = await _originalUrlService.GetByShortCode(shortCode, userAgent, ipAdress);
+            var ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString();
+            var response = await _originalUrlService.GetByShortCode(shortCode, userAgent, ipAddress);
             if (!response.IsSuccess)
             {
-                return BadRequest(response.Error);
+                return NotFound(response.Error);
             }
             return Redirect(response.OriginalUrl);
         }
 
+        //Delete Short URL
         [HttpGet("details/{shortCode}")]
         public async Task<ActionResult<GetUrlDetailsResponse>> GetUrlDetails(string shortCode)
         {
@@ -52,6 +55,7 @@ namespace UrlShortenerApp.API.Controllers
             return response;
         }
 
+        //Update Short URL
         [HttpPut]
         public async Task<ActionResult<UpdateOriginalUrlResponse>> Update(UpdateOriginalUrlRequest request)
         {
@@ -63,6 +67,7 @@ namespace UrlShortenerApp.API.Controllers
             return response;
         }
 
+        //Delete Short URL
         [HttpDelete("{shortCode}")]
         public async Task<ActionResult<DeleteOriginalUrlResponse>> Delete([FromRoute] string shortCode)
         {

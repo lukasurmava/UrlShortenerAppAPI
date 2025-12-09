@@ -29,7 +29,7 @@ namespace UrlShortenerApp.Service.Concrete
         public async Task<CreateOriginalUrlResponse> CreateShortUrl(CreateOriginalUrlRequest request)
         {
             var response = new CreateOriginalUrlResponse();
-            var shortcode = "";
+            string shortcode;
             if (request.ExpireDate < DateTime.UtcNow)
             {
                 response.IsSuccess = false;
