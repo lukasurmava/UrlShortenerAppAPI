@@ -55,6 +55,12 @@ namespace UrlShortenerApp.Service.Concrete
                     shortcode = Common.GenerateShortCode();
                 }
             }
+            if (!Common.IsValidUrl(request.OriginalUrl))
+            {
+                response.IsSuccess = false;
+                response.Error = "The provided URL is not valid.";
+                return response;
+            }
 
                 var originalUrl = new OriginalUrl()
                 {
