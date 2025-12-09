@@ -29,22 +29,42 @@ namespace UrlShortenerApp.Service.Concrete
         public async Task<CreateOriginalUrlResponse> CreateShortUrl(CreateOriginalUrlRequest request)
         {
             var response = new CreateOriginalUrlResponse();
+            var shortcode = "";
             if (request.ExpireDate < DateTime.UtcNow)
             {
                 response.IsSuccess = false;
                 response.Error = "Expiredate can't be less then current date";
                 return response;
             }
-            var shortcode = string.IsNullOrEmpty(request.Alias) ? Common.GenerateShortCode() : request.Alias;
-            var originalUrl = new OriginalUrl()
+            if (!string.IsNullOrEmpty(request.Alias))
             {
-                ShortCode = shortcode,
-                CreatedOn = DateTime.UtcNow,
-                ClickCount = 0,
-                ExpirationDate = request.ExpireDate,
-                IsActive = true, 
-                OriginalLink = request.OriginalUrl
-            };
+                var existingUrl = await _originalUrlRepository.ShortCodeExist(request.Alias);
+                if (existingUrl)
+                {
+                    response.IsSuccess = false;
+                    response.Error = "Alias is already in use. Please choose another one.";
+                    return response;
+                }
+                shortcode = request.Alias;
+            }
+            else
+            {
+                shortcode = Common.GenerateShortCode();
+                while (await _originalUrlRepository.ShortCodeExist(shortcode))
+                {
+                    shortcode = Common.GenerateShortCode();
+                }
+            }
+
+                var originalUrl = new OriginalUrl()
+                {
+                    ShortCode = shortcode,
+                    CreatedOn = DateTime.UtcNow,
+                    ClickCount = 0,
+                    ExpirationDate = request.ExpireDate,
+                    IsActive = true,
+                    OriginalLink = request.OriginalUrl
+                };
             await _originalUrlRepository.Create(originalUrl);
 
             response.OriginalUrl = originalUrl.OriginalLink;
