@@ -46,14 +46,9 @@ namespace UrlShortenerApp.Domain
             ClickCount++;
         }
 
-        public void Deactivate()
+        public void SetIsActive(bool isActive)
         {
-            IsActive = false;
-        }
-
-        public void Activate()
-        {
-            IsActive = true;
+            IsActive = isActive;
         }
 
         public void SetExpirationDate(DateTime expirationDate)

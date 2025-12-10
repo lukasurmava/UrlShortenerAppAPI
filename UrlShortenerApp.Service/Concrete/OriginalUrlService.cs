@@ -62,15 +62,8 @@ namespace UrlShortenerApp.Service.Concrete
                 return response;
             }
 
-                var originalUrl = new OriginalUrl()
-                {
-                    ShortCode = shortcode,
-                    CreatedOn = DateTime.UtcNow,
-                    ClickCount = 0,
-                    ExpirationDate = request.ExpireDate,
-                    IsActive = true,
-                    OriginalLink = request.OriginalUrl
-                };
+            var originalUrl = new OriginalUrl(shortcode, request.OriginalUrl, request.ExpireDate);
+
             await _originalUrlRepository.Create(originalUrl);
 
             response.OriginalUrl = originalUrl.OriginalLink;
@@ -118,7 +111,7 @@ namespace UrlShortenerApp.Service.Concrete
                 response.IsSuccess = false;
                 return response;
             }
-            entity.ClickCount += 1;
+            entity.IncrementClickCount();
             await _originalUrlRepository.Update(entity);
             await _analyticService.LogAnalytic(shortCode, userAgent, ipAdress);
             response.OriginalUrl = entity.OriginalLink;
@@ -166,9 +159,9 @@ namespace UrlShortenerApp.Service.Concrete
                 return response;
             }
 
-            entity.ExpirationDate = request.ExpirationDate ?? entity.ExpirationDate;
-            entity.OriginalLink = request.OriginalUrl ?? entity.OriginalLink;
-            entity.IsActive = request.IsActive ?? entity.IsActive;
+            entity.SetExpirationDate(request.ExpirationDate ?? entity.ExpirationDate);
+            entity.UpdateOriginalLink(request.OriginalUrl ?? entity.OriginalLink);
+            entity.SetIsActive(request.IsActive ?? entity.IsActive);
             await _originalUrlRepository.Update(entity);
             response.IsSuccess = true;
             return response;
@@ -176,8 +169,8 @@ namespace UrlShortenerApp.Service.Concrete
 
         public async Task DeleteExpiredUrls()
         {
-            var expiredUrls = await _originalUrlRepository.GetAll();
-            foreach (var url in expiredUrls.Where(u => u.ExpirationDate < DateTime.UtcNow && u.IsActive == true))
+            var expiredUrls = await _originalUrlRepository.GetExpiredUrls();
+            foreach (var url in expiredUrls)
             {
                 await _originalUrlRepository.Deactivate(url.ShortCode);
             }

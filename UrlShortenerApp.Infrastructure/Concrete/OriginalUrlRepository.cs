@@ -51,7 +51,7 @@ namespace UrlShortenerApp.Infrastructure.Concrete
         public async Task Deactivate(string shortCode)
         {
             var originalUrl = await _appDbContext.OriginalUrls.FirstOrDefaultAsync(s => s.ShortCode == shortCode);
-            originalUrl.IsActive = false;
+            originalUrl.SetIsActive(false);
             await _appDbContext.SaveChangesAsync();
 
         }
@@ -60,6 +60,12 @@ namespace UrlShortenerApp.Infrastructure.Concrete
         {
             var exists = await _appDbContext.OriginalUrls.AnyAsync(s => s.ShortCode == shortCode);
             return exists;
+        }
+
+        public async Task<List<OriginalUrl>> GetExpiredUrls()
+        {
+            var expiredUrls = await _appDbContext.OriginalUrls.Where(url => url.ExpirationDate <= DateTime.UtcNow).ToListAsync();
+            return expiredUrls;
         }
 
     }
