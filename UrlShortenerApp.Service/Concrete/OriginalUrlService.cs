@@ -1,16 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UrlShortenerApp.Infrastructure.Abstractions;
+﻿using UrlShortenerApp.Infrastructure.Abstractions;
 using UrlShortenerApp.Infrastructure;
 using UrlShortenerApp.Service.Abstractions;
 using UrlShortenerApp.Service.Requests;
 using UrlShortenerApp.Service.Responses;
 using UrlShortenerApp.Domain;
-using System.Runtime.InteropServices;
-using System.Runtime.CompilerServices;
 
 namespace UrlShortenerApp.Service.Concrete
 {

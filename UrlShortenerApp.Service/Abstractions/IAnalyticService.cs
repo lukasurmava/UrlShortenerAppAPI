@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace UrlShortenerApp.Service.Abstractions
+﻿namespace UrlShortenerApp.Service.Abstractions
 {
     public interface IAnalyticService
     {

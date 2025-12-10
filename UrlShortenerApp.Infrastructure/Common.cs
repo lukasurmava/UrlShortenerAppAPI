@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace UrlShortenerApp.Infrastructure
+﻿namespace UrlShortenerApp.Infrastructure
 {
     public class Common
     {

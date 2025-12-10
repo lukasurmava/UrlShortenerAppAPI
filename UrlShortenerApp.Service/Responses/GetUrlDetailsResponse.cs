@@ -1,10 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UrlShortenerApp.Domain;
+﻿using UrlShortenerApp.Domain;
 
 namespace UrlShortenerApp.Service.Responses
 {

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using UrlShortenerApp.Domain;
+﻿using UrlShortenerApp.Domain;
 using UrlShortenerApp.Infrastructure.Abstractions;
 using UrlShortenerApp.Service.Abstractions;
 
@@ -17,11 +14,8 @@ namespace UrlShortenerApp.Service.Concrete
         }
         public async Task LogAnalytic(string shortCode, string ipAddress, string userAgent)
         {
-            var analytic = new Analytic();
-            analytic.ShortCode = shortCode;
-            analytic.ClickDate = DateTime.UtcNow;
-            analytic.IpAdress = ipAddress;
-            analytic.UserAgent = userAgent;
+            var analytic = new Analytic(shortCode, userAgent, ipAddress);
+
             await _analyticRepository.Create(analytic);
         }
     }
