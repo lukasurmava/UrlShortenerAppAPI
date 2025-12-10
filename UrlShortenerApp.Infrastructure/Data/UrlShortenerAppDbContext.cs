@@ -13,13 +13,13 @@ namespace UrlShortenerApp.Infrastructure.Data
         {
             base.OnModelCreating(builder);
             builder.Entity<OriginalUrl>().HasKey(s => s.ShortCode);
-            builder.Entity<Analytic>().HasKey(a => a.Id);
             builder.Entity<OriginalUrl>().Property(o => o.ShortCode).HasMaxLength(8);
             builder.Entity<OriginalUrl>().Property(o => o.OriginalLink).HasMaxLength(2048);
             builder.Entity<OriginalUrl>().Property(u => u.IsActive).HasDefaultValue(true);
             builder.Entity<Analytic>().Property(a => a.UserAgent).HasMaxLength(512);
             builder.Entity<Analytic>().Property(a => a.IpAdress).HasMaxLength(45);
             builder.Entity<Analytic>().Property(a => a.ShortCode).HasMaxLength(8);
+            builder.Entity<Analytic>().HasKey(a => a.Id);
         }
 
 
