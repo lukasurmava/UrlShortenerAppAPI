@@ -24,7 +24,6 @@ namespace UrlShortenerApp.Domain
             UserAgent = userAgent;
             IpAdress = ipAdress;
         }
-        [Key]
         public int Id { get; private set; }
         public string ShortCode { get; private set; }
         public DateTime ClickDate { get; private set; }

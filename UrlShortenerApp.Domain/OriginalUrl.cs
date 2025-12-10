@@ -28,7 +28,6 @@ namespace UrlShortenerApp.Domain
             IsActive = true;
         }
 
-        [Key]
         public string ShortCode { get; private set; }
         public string OriginalLink { get; private set; }
         public DateTime CreatedOn { get; private set; }
