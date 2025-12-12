@@ -6,11 +6,9 @@ namespace UrlShortenerApp.Service.Responses
         string OriginalUrl,
         string ShortCode,
         DateTime CreatedOn,
-        DateTime? ExpirationDate,
+        DateTime ExpirationDate,
         bool IsActive,
         int ClickCount,
-        List<Analytic> Analytics,
-        bool IsSuccess,
-        string? Error
-        ) : ResponseBase(IsSuccess, Error);
+        List<Analytic> Analytics
+        ) : ResponseBase(true, null);
 }

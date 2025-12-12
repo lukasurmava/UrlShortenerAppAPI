@@ -19,30 +19,33 @@ namespace UrlShortenerApp.Service.Concrete
             _analyticService = analyticService;
         }
         //Create ShortUrl
-        public async Task<CreateOriginalUrlResponse> CreateShortUrl(CreateOriginalUrlRequest request)
+        public async Task<ResponseBase> CreateShortUrl(CreateOriginalUrlRequest request)
         {
-            var response = new CreateOriginalUrlResponse();
             string shortcode;
+
             if (request.ExpireDate < DateTime.UtcNow)
             {
-                response.IsSuccess = false;
-                response.Error = "Expiredate can't be less then current date";
+                var response = new FailedResponse("Expiredate can't be less then current date");
+
                 return response;
             }
             if (!string.IsNullOrEmpty(request.Alias))
             {
                 var existingUrl = await _originalUrlRepository.ShortCodeExist(request.Alias);
+
                 if (existingUrl)
                 {
-                    response.IsSuccess = false;
-                    response.Error = "Alias is already in use. Please choose another one.";
+                    var response = new FailedResponse("Alias is already in use.");
+
                     return response;
                 }
+
                 shortcode = request.Alias;
             }
             else
             {
                 shortcode = Common.GenerateShortCode();
+
                 while (await _originalUrlRepository.ShortCodeExist(shortcode))
                 {
                     shortcode = Common.GenerateShortCode();
@@ -50,114 +53,110 @@ namespace UrlShortenerApp.Service.Concrete
             }
             if (!Common.IsValidUrl(request.OriginalUrl))
             {
-                response.IsSuccess = false;
-                response.Error = "The provided URL is not valid.";
-                return response;
-            }
+                var response = new FailedResponse("The provided URL is not valid.");
 
-            var originalUrl = new OriginalUrl(shortcode, request.OriginalUrl, request.ExpireDate);
-
-            await _originalUrlRepository.Create(originalUrl);
-
-            response.OriginalUrl = originalUrl.OriginalLink;
-            response.ShortUrl = originalUrl.ShortCode;
-            response.CreatedOn = originalUrl.CreatedOn;
-            response.ExpirationDate = originalUrl.ExpirationDate;
-            response.ClickCount = originalUrl.ClickCount;
-            response.IsSuccess = true;
-            return response;
-        }
-
-        //Delete Url
-        public async Task<DeleteOriginalUrlResponse> DeleteUrl(string shortCode)
-        {
-            var response = new DeleteOriginalUrlResponse();
-            if (await _originalUrlRepository.GetByShortCode(shortCode) is not null)
-            {
-                await _originalUrlRepository.Delete(shortCode);
-                response.IsSuccess = true;
                 return response;
             }
             else
             {
-                response.IsSuccess = false;
-                response.Error = "Can't find record by this short code";
+                var originalUrl = new OriginalUrl(shortcode, request.OriginalUrl, request.ExpireDate);
+
+                await _originalUrlRepository.Create(originalUrl);
+
+                var response = new CreateOriginalUrlResponse(
+                    originalUrl.ShortCode,
+                    originalUrl.OriginalLink,
+                    originalUrl.ExpirationDate,
+                    originalUrl.ClickCount
+                    );
+
+                return response;
+            }
+
+
+        }
+
+        //Delete Url
+        public async Task<ResponseBase> DeleteUrl(string shortCode)
+        {
+            if (await _originalUrlRepository.GetByShortCode(shortCode) is not null)
+            {
+                await _originalUrlRepository.Delete(shortCode);
+                var response = new DeleteOriginalUrlResponse();
+                return response;
+            }
+            else
+            {
+                var response = new FailedResponse("Can't find record by this short code");
                 return response;
             }
             
         }
 
         //This is redirect method
-        public async Task<GetByShortCodeResponse> GetByShortCode(string shortCode, string userAgent, string ipAdress)
+        public async Task<ResponseBase> GetByShortCode(string shortCode, string userAgent, string ipAdress)
         {
-            var response = new GetByShortCodeResponse();
             var entity = await _originalUrlRepository.GetByShortCode(shortCode);
             if (entity is null)
             {
-                response.Error = "URL with this short code could not be found!";
-                response.IsSuccess = false;
+                var response = new FailedResponse("URL with this short code could not be found!");
                 return response;
             }
             if (entity.ExpirationDate < DateTime.UtcNow)
             {
-                response.Error = "URL with this short code has expired!";
-                response.IsSuccess = false;
-                return response;
-            }
-            entity.IncrementClickCount();
-            await _originalUrlRepository.Update(entity);
-            await _analyticService.LogAnalytic(shortCode, userAgent, ipAdress);
-            response.OriginalUrl = entity.OriginalLink;
-            response.IsSuccess = true;
-            return response;
-        }
-
-        //This is method to get all the details
-        public async Task<GetUrlDetailsResponse> GetUrlDetails(string shortCode)
-        {
-            var response = new GetUrlDetailsResponse();
-            var originalUrl = await _originalUrlRepository.GetByShortCode(shortCode);
-            var analytics = await _analyticRepository.GetByShortCode(shortCode);
-            if (originalUrl is null)
-            {
-                response.IsSuccess = false;
-                response.Error = "Can't find record by that short code";
+                var response = new FailedResponse("URL with this short code has expired!");
                 return response;
             }
             else
             {
-                response.IsSuccess = true;
-                response.ShortCode = shortCode;
-                response.ExpirationDate = originalUrl.ExpirationDate;
-                response.CreatedOn = originalUrl.CreatedOn;
-                response.Analytics = analytics;
-                response.ClickCount = originalUrl.ClickCount;
-                response.OriginalUrl = originalUrl.OriginalLink;
-                response.IsActive = originalUrl.IsActive;
+                entity.IncrementClickCount();
+                await _originalUrlRepository.Update(entity);
+                await _analyticService.LogAnalytic(shortCode, userAgent, ipAdress);
+                return new GetByShortCodeResponse(entity.OriginalLink);
+            }
+
+        }
+
+        //This is method to get all the details
+        public async Task<ResponseBase> GetUrlDetails(string shortCode)
+        {
+            var originalUrl = await _originalUrlRepository.GetByShortCode(shortCode);
+            var analytics = await _analyticRepository.GetByShortCode(shortCode);
+            if (originalUrl is null)
+            {
+                var response = new FailedResponse("Can't find record by that short code");
                 return response;
+            }
+            else
+            {
+                return new GetUrlDetailsResponse(
+                    originalUrl.OriginalLink,
+                    originalUrl.ShortCode,
+                    originalUrl.CreatedOn,
+                    originalUrl.ExpirationDate,
+                    originalUrl.IsActive,
+                    originalUrl.ClickCount,
+                    analytics.ToList()
+                    );
             }
 
         }
 
         //Update method
-        public async Task<UpdateOriginalUrlResponse> UpdateUrl(UpdateOriginalUrlRequest request)
+        public async Task<ResponseBase> UpdateUrl(UpdateOriginalUrlRequest request)
         {
-            var response = new UpdateOriginalUrlResponse();
             var entity = await _originalUrlRepository.GetByShortCode(request.ShortCode);
 
             if (request.OriginalUrl is null && request.ExpirationDate is null && request.IsActive is null)
             {
-                response.IsSuccess = false;
-                response.Error = "There is nothing to update";
-                return response;
+                return new FailedResponse("There is nothing to update");
             }
 
             entity.SetExpirationDate(request.ExpirationDate ?? entity.ExpirationDate);
             entity.UpdateOriginalLink(request.OriginalUrl ?? entity.OriginalLink);
             entity.SetIsActive(request.IsActive ?? entity.IsActive);
             await _originalUrlRepository.Update(entity);
-            response.IsSuccess = true;
-            return response;
+            return new UpdateOriginalUrlResponse();
         }
 
         public async Task DeleteExpiredUrls()

@@ -4,8 +4,6 @@
         string ShortUrl,
         string OriginalUrl,
         DateTime ExpirationDate,
-        int ClickCount,
-        bool IsSuccess,
-        string? Error
-        ) : ResponseBase(IsSuccess, Error);
+        int ClickCount
+        ) : ResponseBase(true, null);
 }

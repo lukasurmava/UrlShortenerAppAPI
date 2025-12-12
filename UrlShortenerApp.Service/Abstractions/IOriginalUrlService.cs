@@ -5,12 +5,12 @@ namespace UrlShortenerApp.Service.Abstractions
 {
     public interface IOriginalUrlService
     {
-        public Task<GetByShortCodeResponse> GetByShortCode(string shortCode, string userAgent, string ipAdress);
-        public Task<CreateOriginalUrlResponse> CreateShortUrl(CreateOriginalUrlRequest request);
-        public Task<GetUrlDetailsResponse> GetUrlDetails(string shortCode);
+        public Task<ResponseBase> GetByShortCode(string shortCode, string userAgent, string ipAdress);
+        public Task<ResponseBase> CreateShortUrl(CreateOriginalUrlRequest request);
+        public Task<ResponseBase> GetUrlDetails(string shortCode);
 
-        public Task<UpdateOriginalUrlResponse> UpdateUrl(UpdateOriginalUrlRequest request);
-        public Task<DeleteOriginalUrlResponse> DeleteUrl(string shortCode);
+        public Task<ResponseBase> UpdateUrl(UpdateOriginalUrlRequest request);
+        public Task<ResponseBase> DeleteUrl(string shortCode);
         public Task DeleteExpiredUrls();
     }
 }
