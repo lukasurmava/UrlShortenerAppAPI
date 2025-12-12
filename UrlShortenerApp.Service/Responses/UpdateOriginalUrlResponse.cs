@@ -1,6 +1,7 @@
 ﻿namespace UrlShortenerApp.Service.Responses
 {
-    public class UpdateOriginalUrlResponse : ResponseBase
-    {
-    }
+    public record UpdateOriginalUrlResponse(
+        bool IsSuccess,
+        string? Error
+        ) : ResponseBase(IsSuccess, Error);
 }

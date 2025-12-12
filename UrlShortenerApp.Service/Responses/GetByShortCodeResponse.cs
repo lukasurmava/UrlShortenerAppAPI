@@ -1,7 +1,8 @@
 ﻿namespace UrlShortenerApp.Service.Responses
 {
-    public class GetByShortCodeResponse : ResponseBase
-    {
-        public string OriginalUrl { get; set; }
-    }
+    public record GetByShortCodeResponse(
+        string OriginalUrl,
+        bool IsSuccess,
+        string? Error
+        ) : ResponseBase(IsSuccess, Error);
 }

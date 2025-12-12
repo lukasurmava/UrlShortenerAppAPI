@@ -2,14 +2,15 @@
 
 namespace UrlShortenerApp.Service.Responses
 {
-    public class GetUrlDetailsResponse : ResponseBase
-    {
-        public string OriginalUrl { get; set; }
-        public string ShortCode { get; set; }
-        public DateTime CreatedOn { get; set; }
-        public DateTime? ExpirationDate { get; set; }
-        public bool IsActive { get; set; }
-        public int ClickCount { get; set; }
-        public List<Analytic> Analytics { get; set; }
-    }
+    public record GetUrlDetailsResponse(
+        string OriginalUrl,
+        string ShortCode,
+        DateTime CreatedOn,
+        DateTime? ExpirationDate,
+        bool IsActive,
+        int ClickCount,
+        List<Analytic> Analytics,
+        bool IsSuccess,
+        string? Error
+        ) : ResponseBase(IsSuccess, Error);
 }
