@@ -19,7 +19,7 @@ namespace UrlShortenerApp.API.Controllers
 
         //Create Short URL
         [HttpPost]
-        public async Task<ActionResult<CreateOriginalUrlResponse>> Create(CreateOriginalUrlRequest createOriginalUrlRequest)
+        public async Task<ActionResult<ResponseBase>> Create(CreateOriginalUrlRequest createOriginalUrlRequest)
         {
             var response = await _originalUrlService.CreateShortUrl(createOriginalUrlRequest);
             if (!response.IsSuccess)
@@ -31,7 +31,7 @@ namespace UrlShortenerApp.API.Controllers
 
         //Delete Short URL
         [HttpGet("details/{shortCode}")]
-        public async Task<ActionResult<GetUrlDetailsResponse>> GetUrlDetails(string shortCode)
+        public async Task<ActionResult<ResponseBase>> GetUrlDetails(string shortCode)
         {
             var response = await _originalUrlService.GetUrlDetails(shortCode);
             if (!response.IsSuccess)
@@ -43,7 +43,7 @@ namespace UrlShortenerApp.API.Controllers
 
         //Update Short URL
         [HttpPut]
-        public async Task<ActionResult<UpdateOriginalUrlResponse>> Update(UpdateOriginalUrlRequest request)
+        public async Task<ActionResult<ResponseBase>> Update(UpdateOriginalUrlRequest request)
         {
             var response = await _originalUrlService.UpdateUrl(request);
             if (!response.IsSuccess)
@@ -55,7 +55,7 @@ namespace UrlShortenerApp.API.Controllers
 
         //Delete Short URL
         [HttpDelete("{shortCode}")]
-        public async Task<ActionResult<DeleteOriginalUrlResponse>> Delete([FromRoute] string shortCode)
+        public async Task<ActionResult<ResponseBase>> Delete([FromRoute] string shortCode)
         {
             var response = await _originalUrlService.DeleteUrl(shortCode);
             if (!response.IsSuccess)

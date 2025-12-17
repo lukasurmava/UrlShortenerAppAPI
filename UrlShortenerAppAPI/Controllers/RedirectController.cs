@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using UrlShortenerApp.Service.Abstractions;
+using UrlShortenerApp.Service.Responses;
 
 namespace UrlShortenerApp.API.Controllers
 {
@@ -23,7 +24,8 @@ namespace UrlShortenerApp.API.Controllers
             {
                 return NotFound(response.Error);
             }
-            return Redirect(response.OriginalUrl);
+            var successResponse = (GetByShortCodeResponse)response;
+            return Redirect(successResponse.OriginalUrl);
         }
     }
 }
